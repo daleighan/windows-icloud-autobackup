@@ -5,11 +5,10 @@ from shutil import copyfile
 
 def backup():
     documents_files = os.listdir('/users/leighn/Documents')
-    #print(files)
     icloud_files_documents = os.listdir('/users/leighn/iCloudDrive/Documents')
+    # This section backs up the documents folder
+    
     documents_to_add = []
-    print(documents_to_add)
-    print(documents_to_add)
 
     for file in documents_files:
         if file not in icloud_files_documents:
@@ -21,6 +20,23 @@ def backup():
             print(file_name)
         except:
             print('Permission denied')
+
+    
+    downloads_files = os.listdir('/users/leighn/Downloads')
+    icloud_files_downloads = os.listdir('/users/leighn/iCloudDrive/Downloads')
+
+    downloads_to_add = []
+
+    for file in downloads_files:
+        if file not in icloud_files_downloads:
+            downloads_to_add.append(file)
+
+    for file_name in downloads_to_add:
+        try:
+            copyfile('/users/leighn/Downloads/' + file_name, '/users/leighn/iCloudDrive/Downloads/' + file_name)
+            print(file_name)
+        except:
+            print('file not copied', file_name)
 
 if __name__ == "__main__":
     print("Backing up files to icloud")
