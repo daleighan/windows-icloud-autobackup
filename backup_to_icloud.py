@@ -1,7 +1,7 @@
 # This script will move unmoved items from the doucuments and download folders to the icloud folder
 
 import os
-from shutil import copyfile
+from shutil import copytree
 
 def backup():
     documents_files = os.listdir('/users/leighn/Documents')
@@ -16,7 +16,7 @@ def backup():
 
     for file_name in documents_to_add:
         try:
-            copyfile('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
+            copytree('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
             print(file_name)
         except:
             print('Permission denied')
@@ -33,7 +33,7 @@ def backup():
 
     for file_name in downloads_to_add:
         try:
-            copyfile('/users/leighn/Downloads/' + file_name, '/users/leighn/iCloudDrive/Downloads/' + file_name)
+            copytree('/users/leighn/Downloads/' + file_name, '/users/leighn/iCloudDrive/Downloads/' + file_name)
             print(file_name)
         except:
             print('file not copied', file_name)
