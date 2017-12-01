@@ -55,11 +55,15 @@ def backup():
             copytree('/users/leighn/Downloads/' + file_name, '/users/leighn/iCloudDrive/Downloads/' + file_name)
             print(file_name)
         except:
-            print('file not copied', file_name)
+            try:
+                copyfile('/users/leighn/Downloads/' + file_name, '/users/leighn/iCloudDrive/Downloads/' + file_name)
+                print(file_name)
+            except:
+                print('copying failed for', file_name)
 
 if __name__ == "__main__":
     start_time = time.time()
-    print("Backing up files to icloud")
+    print("Backing up files to icloud folder")
     backup()
     finish_time = time.time()
     print("Backup complete")
