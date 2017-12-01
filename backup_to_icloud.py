@@ -1,27 +1,46 @@
 # This script will move unmoved items from the doucuments and download folders to the icloud folder
 
 import os
-from shutil import copytree
+from shutil import copytree, copyfile
 
 def backup():
-    documents_files = os.listdir('/users/leighn/Documents')
-    icloud_files_documents = os.listdir('/users/leighn/iCloudDrive/Documents')
+   
     # This section backs up the documents folder
+    documents_dirs_n_files = []
+    icloud_dirs_n_files =[]
     
+    for root, directories, filenames in os.walk('/users/leighn/Documents'):
+        for directory in directories:
+            documents_dirs_n_files.append(os.path.join(root, directory)[24:])
+        for filename in filenames:
+             documents_dirs_n_files.append(os.path.join(root ,filename)[24:])
+
+    for root, directories, filenames in os.walk('/users/leighn/iCloudDrive/Documents'):
+        for directory in directories:
+            icloud_dirs_n_files.append(os.path.join(root, directory)[36:])
+        for filename in filenames:
+             icloud_dirs_n_files.append(os.path.join(root ,filename)[36:])
+
+    print(icloud_dirs_n_files[0])
+    print(documents_dirs_n_files[0])
     documents_to_add = []
 
-    for file in documents_files:
-        if file not in icloud_files_documents:
+    for file in documents_dirs_n_files:
+        if file not in icloud_dirs_n_files:
             documents_to_add.append(file)
 
     for file_name in documents_to_add:
         try:
-            copytree('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
-            print(file_name)
+            if file_name != "My Music" and file_name != "My Pictures" and file_name != "My Videos":
+                copytree('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
+                print(file_name)
         except:
-            print('Permission denied')
+            try:
+                copyfile('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
+                print(file_name)
+            except:
+                print('error on:', file_name)
 
-    
     downloads_files = os.listdir('/users/leighn/Downloads')
     icloud_files_downloads = os.listdir('/users/leighn/iCloudDrive/Downloads')
 
