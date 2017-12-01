@@ -27,12 +27,6 @@ def backup():
     for file in documents_dirs_n_files:
         if file not in icloud_dirs_n_files:
             documents_to_add.append(file)
-
-    documents_to_remove = []
-
-    for file in icloud_dirs_n_files:
-        if file not in documents_dirs_n_files:
-            documents_to_remove.append(file)
     
     for file_name in documents_to_add:
         try:
@@ -45,6 +39,13 @@ def backup():
                 print('file copied', file_name)
             except:
                 print('error on:', file_name)
+
+    # This section removes files from the iCloud shared file if they have been remvoed from the local file
+    documents_to_remove = []
+
+    for file in icloud_dirs_n_files:
+        if file not in documents_dirs_n_files:
+            documents_to_remove.append(file)
                 
     for file_name in documents_to_remove:
         try:
@@ -59,8 +60,7 @@ def backup():
                     os.rmdir('/users/leighn/iCloudDrive/Documents/' + file_name)
                 except:
                     print('removal of', file_name, 'failed')
-                
-                
+                            
     # This section backs up the downloads folder 
     downloads_files = os.listdir('/users/leighn/Downloads')
     icloud_files_downloads = os.listdir('/users/leighn/iCloudDrive/Downloads')
@@ -81,6 +81,29 @@ def backup():
                 print(file_name)
             except:
                 print('copying failed for', file_name)
+                
+    # This section removes downloads from the iCloud file if they have been removed from the local folder
+    downloads_to_remove = []
+
+    for file in icloud_files_downloads:
+        if file not in downloads_files:
+            downloads_to_remove.append(file)
+    print(downloads_to_remove, 'downloads to remove')
+
+    for file_name in downloads_to_remove:
+        try:
+            rmtree('/users/leighn/iCloudDrive/Downloads/' + file_name, ignore_errors=True)
+            print('folder removed', file_name)
+        except:
+            try:
+                os.remove('/users/leighn/iCloudDrive/Downloads/' + file_name)
+                print('file removed', file_name)
+            except:
+                try:
+                    os.rmdir('/users/leighn/iCloudDrive/Downloads/' + file_name)
+                except:
+                    print('removal of', file_name, 'failed')
+    
 
 if __name__ == "__main__":
     start_time = time.time()
