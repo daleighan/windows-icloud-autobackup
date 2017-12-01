@@ -23,22 +23,43 @@ def backup():
              icloud_dirs_n_files.append(os.path.join(root ,filename)[36:])
 
     documents_to_add = []
-
+    
     for file in documents_dirs_n_files:
         if file not in icloud_dirs_n_files:
             documents_to_add.append(file)
+
+    documents_to_remove = []
+
+    for file in icloud_dirs_n_files:
+        if file not in documents_dirs_n_files:
+            documents_to_remove.append(file)
     
     for file_name in documents_to_add:
         try:
             if file_name != "My Music" and file_name != "My Pictures" and file_name != "My Videos":
                 copytree('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
-                print(file_name)
+                print('folder copied', file_name)
         except:
             try:
                 copyfile('/users/leighn/Documents/' + file_name, '/users/leighn/iCloudDrive/Documents/' + file_name)
-                print(file_name)
+                print('file copied', file_name)
             except:
                 print('error on:', file_name)
+                
+    for file_name in documents_to_remove:
+        try:
+            rmtree('/users/leighn/iCloudDrive/Documents/' + file_name, ignore_errors=True)
+            print('folder removed', file_name)
+        except:
+            try:
+                os.remove('/users/leighn/iCloudDrive/Documents/' + file_name)
+                print('file removed', file_name)
+            except:
+                try:
+                    os.rmdir('/users/leighn/iCloudDrive/Documents/' + file_name)
+                except:
+                    print('removal of', file_name, 'failed')
+                
                 
     # This section backs up the downloads folder 
     downloads_files = os.listdir('/users/leighn/Downloads')
