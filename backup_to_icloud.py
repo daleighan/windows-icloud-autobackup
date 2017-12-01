@@ -2,6 +2,7 @@
 
 import os
 from shutil import copytree, copyfile
+import time
 
 def backup():
    
@@ -21,14 +22,12 @@ def backup():
         for filename in filenames:
              icloud_dirs_n_files.append(os.path.join(root ,filename)[36:])
 
-    print(icloud_dirs_n_files[0])
-    print(documents_dirs_n_files[0])
     documents_to_add = []
 
     for file in documents_dirs_n_files:
         if file not in icloud_dirs_n_files:
             documents_to_add.append(file)
-
+    
     for file_name in documents_to_add:
         try:
             if file_name != "My Music" and file_name != "My Pictures" and file_name != "My Videos":
@@ -40,7 +39,8 @@ def backup():
                 print(file_name)
             except:
                 print('error on:', file_name)
-
+                
+    # This section backs up the downloads folder 
     downloads_files = os.listdir('/users/leighn/Downloads')
     icloud_files_downloads = os.listdir('/users/leighn/iCloudDrive/Downloads')
 
@@ -58,6 +58,9 @@ def backup():
             print('file not copied', file_name)
 
 if __name__ == "__main__":
+    start_time = time.time()
     print("Backing up files to icloud")
     backup()
+    finish_time = time.time()
     print("Backup complete")
+    print("Time elapesed:", finish_time - start_time, "seconds")
